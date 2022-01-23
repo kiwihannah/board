@@ -1,0 +1,26 @@
+/* test db 실행 */
+const articles = [
+    {
+      bno: 1,
+      title: "article testing",
+      writer : "Hannah",
+      context: "context testing",
+      ins_date: new Date().toISOString().split('T')[0],
+      upd_date: "",
+      use_yn: "Y",
+    },
+];
+
+router.get("/articles", (req, res) => {
+	res.json({ articles, });
+});
+
+/* 1. ReadOne: filtered by bno */
+router.get("/articles/:bno", (req, res) => {
+    const bno =  req.params.bno;
+    const [data] = articles.filter((article) => article.bno === Number(bno));
+    res.json({
+        data,
+    });
+    console.log("[get article no]", bno);
+});
