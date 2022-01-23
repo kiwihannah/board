@@ -1,3 +1,6 @@
+/**
+ * function list : CRUD + filter 
+ */
 const express = require("express");
 const Article = require("../schemas/article");
 const router = express.Router();
