@@ -26,18 +26,28 @@ router.post("/articles", async (req, res) => {
     res.json({ article: createdArticle });
 });
 
-// 1_1. read All
+// 1_1. read All 
 router.get("/articles", async (req, res) => {
     const articels = await Article.find();
     res.json({ articels });
 });
 
-// 1_2. read One 
+// 1_2. read One filtered by bno
 router.get("/articles/:bno", async (req, res) => {
     const { bno } = req.params;
     const article = await Article.findOne({ bno });
     if(!article) {
         return res.status(400).json({ success: false, errorMessage: "Cannot read an empty article" });
+    }
+    res.json({ article });
+});
+
+// 1_3. read Many filtered by level
+router.get("/articles/level/:level", async (req, res) => {
+    const { level } = req.params;
+    const article = await Article.find({ level });
+    if(!article) {
+        return res.status(400).json({ success: false, errorMessage: "Cannot read an this level of article" });
     }
     res.json({ article });
 });
@@ -65,7 +75,7 @@ router.put("/articles/:bno", async (req, res) => {
     res.json({ result: "success" });
 });
 
-// 3. delete
+// 3. delete filtered by bno
 router.delete("/articles/:bno", async (req, res) => {
     const { bno } = req.params;
     const isBno = (await Article.find({ bno }) !== "");
