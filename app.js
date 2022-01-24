@@ -3,27 +3,31 @@ const conn = require("./schemas");
 const app = express();
 const port = 3000;
 
-/* mongodb conn, json형으로 body 받기 */
+/* connecting mongodb */
 conn();
-app.use(express.json());
 
-/* 서버 로그 */
-app.listen(port, () => {
-    console.log(port, ': server connected')
-});
-
-/* 미들웨어 위치로 router 선언, 사용하기 */
-const articleRouter = require("./routes/article");
-app.use("/api", [articleRouter]);
-
-/* url 접근 로그 */
+/* reached url log */
 const requestMiddleware = (req, res, next) => {
     console.log("Request URL:" , req.originalUrl, "-", new Date());
     next();
 };
 
-/* 'home' 반환 */
-app.get('/', (req, res) => {
-    res.send('Home');
+/* enable middleware, static folder, parsing to json type */ 
+app.use(requestMiddleware);
+app.use(express.static("static"));
+app.use(express.json());
+
+/* sever connecting log */
+app.listen(port, () => {
+    console.log(port, ': server connected')
+});
+
+/* articel middleware use*/
+const articleRouter = require("./routes/article");
+app.use("/api", [articleRouter]);
+
+/* default */
+app.get("/", (req, res) => {
+    res.send("home page");
 });
 
