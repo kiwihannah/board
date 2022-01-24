@@ -1,3 +1,4 @@
+/* import express */
 const express = require('express');
 const conn = require("./schemas");
 const app = express();
@@ -6,7 +7,7 @@ const port = 3000;
 /* connecting mongodb */
 conn();
 
-/* reached url log */
+/* variate middleware */
 const requestMiddleware = (req, res, next) => {
     console.log("Request URL:" , req.originalUrl, "-", new Date());
     next();
