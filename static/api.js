@@ -27,7 +27,7 @@ function getArticles() {
     url: "/api/articles",
     success: function (response) {
       console.log("[api : read all]");
-      let articles = response["articels"];
+      let articles = response["articles"];
       for (let i = 0; i < articles.length; i++) {
         addList(articles[i]);
       }
@@ -38,8 +38,6 @@ function getArticles() {
 /* 0_2. read one article */
 function getOneArticle() {
   let bno = getCheckboxValue();
-  $("#btn-save").hide();
-  btnShow();
   $("#new-form").empty();
   $.ajax({
     type: "GET",
@@ -52,17 +50,27 @@ function getOneArticle() {
   });
 }
 
-/* 0_3. read many article */
-// function getArticles(level, callback) {
-//   $("#goodsList").empty();
-//   $.ajax({
-//     type: "GET",
-//     url: `/api/articles${category ? "?category=" + category : ""}`,
-//     success: function (response) {
-//       callback(response["goods"]);
-//     },
-//   });
-// }
+/* 0_3. read many article | level, order, comp_yn */
+function searchArticles() {
+  $("#article-list").empty();
+  let orderByLevel = $("#orderByLevel").val();
+  let orderBySolve = $("#orderBySolve").val();
+  let orederByDate = $("#orederByDate").val();
+  //alert(orderByLevel);alert(orderBySolve);alert(orederByDate);
+  //let params = "level=" + orderByLevel + "&comp_yn=" + orderBySolve + "&ins_date=" + orederByDate;
+  $.ajax({
+    type: "GET",
+    url: `/api/filter?level=${orderByLevel}&comp_yn=${orderBySolve}&ins_date=${orederByDate}`,
+    //url: "/api/filter?level=1&comp_yn=Y&ins_date=-1",
+    success: function (response) {
+      console.log("[api : read selectvly ]");
+      let articles = response["articles"];
+      for (let i = 0; i < articles.length; i++) {
+        addList(articles[i]);
+      }
+    },
+  });
+}
 
 /* 1_1. post new article | level, writer, title, url */
 function addArticle() {

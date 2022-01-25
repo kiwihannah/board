@@ -28,9 +28,9 @@ router.post("/articles", async (req, res) => {
 
 // 1_1. read All 
 router.get("/articles", async (req, res) => {
-    const articels = await Article.find().sort({ "bno" : -1 })
+    const articles = await Article.find().sort({ "bno" : -1 })
     console.log("[Router : READ ALL]");
-    res.json({ articels });
+    res.json({ articles });
 });
 
 // 1_2. read One filtered by bno
@@ -44,14 +44,15 @@ router.get("/articles/:bno", async (req, res) => {
     res.json({ article });
 });
 
-// 1_3. read Many filtered by level
-router.get("/articles/level/:level", async (req, res) => {
-    const { level } = req.params;
-    const article = await Article.find({ level });
-    if(!article) {
-        return res.status(400).json({ success: false, errorMessage: "Cannot read an this level of article" });
-    }
-    res.json({ article });
+// 1_3. read Many filtered by level, order, comp_yn
+//"/filter/:level/:comp_yn/:ins_date"
+router.get("/filter", async (req, res) => {
+    const { level, comp_yn, ins_date } = req.query
+    console.log( level, comp_yn, ins_date );
+    // const articles = await Article.find({ "level" : level }).sort({ "bno" : -1 })
+    const articles = await Article.find({ $and : [{ "level" : level }, { "comp_yn" : comp_yn }] }).sort({ "ins_date" : ins_date });
+    console.log("[Router : READ FILTERED]", articles);
+    res.json({ articles });
 });
 
 // 3. update filtered by bno - method: put

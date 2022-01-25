@@ -1,8 +1,41 @@
 #buttons {
   padding-bottom: 25px ;
+  float: left;
 }
 
 #new-form {
-  text-align: center;
   margin: 14px;
+}
+
+.parent{
+  width: 100%;
+}
+
+.first {
+  float: left;
+  width: 40%;
+}
+
+.second{
+  float: left;
+  margin-left: 1%;
+  width:15%;
+}
+
+.third{
+  float: left;
+  margin-left: 1%;
+  width:15%;
+}
+
+.forth{
+  float: left;
+  margin-left: 1%;
+  width:15%;
+}
+
+.fifth{
+  float: right;
+  margin-left: 1%;
+  width:11%;
 }

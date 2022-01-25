@@ -49,6 +49,7 @@
     }
 
     function readOneArticle() {
+        $("#btn-save").hide();
         let bool = getCheckboxValue();
         if (bool === -1) {
             alert("check one article to mogdify");
@@ -92,7 +93,7 @@
             $("select option[value='3']").attr("selected", "selected");
         }
     }
-    
+
 </script>
 
 <head>
@@ -108,7 +109,7 @@
     <header class="bs4header bg-primary">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark">
-                <a class="navbar-brand" href="/"><b><i> &lt; / &gt; PITA</i></b></a>
+                <a class="navbar-brand" href="index.html"><b><i> &lt; / &gt; PITA</i></b></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs4navbar"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -134,14 +135,37 @@
     </header>
 
     <main class="container pt-5">
-        <div id="buttons">
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalAbandonedCart"
-                onclick="btnHide()">
-                add new</button>
-            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#modalAbandonedCart" 
-                onclick="readOneArticle()">modify</button>
-            <button type="button" class="btn btn-outline-success">to my list</button>
-            <button type="button" class="btn btn-outline-warning">to today's list</button>
+        <div class="parent">
+            <div class="first" id="buttons">
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                    data-target="#modalAbandonedCart" onclick="btnHide()">
+                    add new</button>
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#modalAbandonedCart" onclick="readOneArticle()">modify</button>
+                <!-- <button type="button" class="btn btn-outline-warning">to today's list</button> -->
+            </div>
+            <div class="second">
+                <select class="form-control" id="orderBySolve">
+                    <option value="Y">solved</option>
+                    <option value="N">unsolved</option>
+                </select>
+            </div>
+            <div class="third">
+                <select class="form-control" id="orderByLevel">
+                    <option value="1">초급</option>
+                    <option value="2">중급</option>
+                    <option value="3">고급</option>
+                </select>
+            </div>
+            <div class="forth">
+                <select class="form-control" id="orederByDate">
+                    <option value="-1">최신순</option>
+                    <option value="1">오래된순</option>
+                </select>
+            </div>
+            <div class="d-grid gap-2 btn-block fifth">
+                <a type="submit" class="btn btn-info btn-block" id="btn-save" onclick="searchArticles()">search</a>
+            </div>
         </div>
         <table class="table table-bordered table-definition mb-5">
             <thead class="table-warning ">
@@ -196,10 +220,11 @@
                 <!--Header-->
                 <div class="modal-header">
                     <p class="heading">
-                    <h3>new coding test</h3>
+                    <h3>form</h3>
                     </p>
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="javascript:window.location.reload();">
                         <span aria-hidden="true" class="white-text">&times;</span>
                     </button>
                 </div>
@@ -233,7 +258,8 @@
                         <a type="submit" class="btn btn-info" id="btn-save" onclick="addArticle()">save</a>
                         <a type="submit" class="btn btn-info" id="btn-modify" onclick="modifyArticle()">modify</a>
                         <a type="submit" class="btn btn-info" id="btn-delete" onclick="deleteArticle()">delete</a>
-                        <a type="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">Cancel</a>
+                        <a type="button" class="btn btn-outline-info waves-effect" data-dismiss="modal"
+                            onclick="javascript:window.location.reload();">Cancel</a>
                     </div>
                 </div>
                 <!--/.Content-->
