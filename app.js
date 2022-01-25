@@ -25,7 +25,8 @@ app.listen(port, () => {
 
 /* articel middleware use*/
 const articleRouter = require("./routes/article");
-app.use("/api", [articleRouter]);
+const todoRouter = require("./routes/todo");
+app.use("/api", [articleRouter, todoRouter]);
 
 /* default */
 app.get("/", (req, res) => {
