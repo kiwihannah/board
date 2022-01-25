@@ -12,7 +12,7 @@ const articleSchema = new mongoose.Schema({
         required: true,
         unique: false
     },
-    writer: {
+    writer: { //mem_code
         type: String,
         required: true,
         unique: false
@@ -22,7 +22,7 @@ const articleSchema = new mongoose.Schema({
         required: true,
         unique: false
     },
-    context: {
+    url: {
         type: String,
         required: true,
         unique: false

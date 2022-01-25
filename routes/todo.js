@@ -7,9 +7,10 @@ const Todos = require("../schemas/todos");
 const router = express.Router();
 
 // 0. create - method : post
-/* bno, comp_yn, ins_date, use_yn */
+/* bno, type, comp_yn, ins_date, use_yn */
 router.post("/todos/:bno", async (req, res) => {
     const { bno } = req.params;
+    const { type } = req.body;
 
     const todos = await Article.find({ bno });
     if (!todos.length) {
@@ -17,7 +18,8 @@ router.post("/todos/:bno", async (req, res) => {
     }
 
     const createdTodos = await Todos.create({ 
-        bno     : bno, 
+        bno     : bno,
+        type    : type, 
         comp_yn : "N",
         ins_date: new Date().toISOString().split('T')[0], 
         use_yn  : "Y" 
@@ -25,9 +27,13 @@ router.post("/todos/:bno", async (req, res) => {
     res.json({ todos: createdTodos });
 });
 
-// 1. read All 
-router.get("/todos", async (req, res) => {
-    const todos = await Todos.find();
+// 1. read All filtered by type
+router.get("/todos/:type", async (req, res) => {
+    const { type } = req.params;
+    const todos = await Todos.find({ type });
+    if(!todos) {
+        return res.status(400).json({ success: false, errorMessage: "no data for this list" });
+    }
     res.json({ todos });
 });
 

@@ -1,160 +1,139 @@
-// const socket = io.connect("/");
-
-// socket.on("BUY_GOODS", function (data) {
-//   const { nickname, goodsId, goodsName, date } = data;
-//   makeBuyNotification(nickname, goodsName, goodsId, date);
-// });
-
-function initAuthenticatePage() {
-  // socket.emit("CHANGED_PAGE", `${location.pathname}${location.search}`);
+function btnHide() {
+  $("#btn-modify").hide();
+  $("#btn-delete").hide();
 }
 
-function bindSamePageViewerCountEvent(callback) {
-  // socket.on("SAME_PAGE_VIEWER_COUNT", callback);
+function btnShow() {
+  $("#btn-modify").show();
+  $("#btn-delete").show();
 }
 
-function postOrder(user, order) {
-  if (!order.length) {
-    return;
+function getCheckboxValue() {
+  let bnos = document.getElementsByName("checkBno");
+  let arrBno = [];
+  for (var i = 0; i < bnos.length; i++) {
+    if (bnos[i].checked == true) {
+      arrBno.push(bnos[i].value);
+    }
   }
-
-  // socket.emit("BUY", {
-  //   nickname: user.nickname,
-  //   goodsId: order[0].goods.goodsId,
-  //   goodsName:
-  //     order.length > 1
-  //       ? `${order[0].goods.name} 외 ${order.length - 1}개의 상품`
-  //       : order[0].goods.name,
-  // });
+  return arrBno.length === 1 ? arrBno[0] : -1;
 }
 
-// function getSelf(callback) {
+/* 0_1. read all article */
+function getArticles() {
+  $("#article-list").empty();
+  $.ajax({
+    type: "GET",
+    url: "/api/articles",
+    success: function (response) {
+      console.log("[api : read all]");
+      let articles = response["articels"];
+      for (let i = 0; i < articles.length; i++) {
+        addList(articles[i]);
+      }
+    },
+  });
+}
+
+/* 0_2. read one article */
+function getOneArticle() {
+  let bno = getCheckboxValue();
+  $("#btn-save").hide();
+  btnShow();
+  $("#new-form").empty();
+  $.ajax({
+    type: "GET",
+    url: `/api/articles/${bno}`,
+    success: function (response) {
+      let article = response["article"];
+      console.log("[api : read one]", article["bno"]);
+      readOne(article);
+    },
+  });
+}
+
+/* 0_3. read many article */
+// function getArticles(level, callback) {
+//   $("#goodsList").empty();
 //   $.ajax({
 //     type: "GET",
-//     url: "/api/users/me",
-//     headers: {
-//       authorization: `Bearer ${localStorage.getItem("token")}`,
-//     },
+//     url: `/api/articles${category ? "?category=" + category : ""}`,
 //     success: function (response) {
-//       callback(response.user);
-//     },
-//     error: function (xhr, status, error) {
-//       if (status == 401) {
-//         alert("로그인이 필요합니다.");
-//       } else {
-//         localStorage.clear();
-//         alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
-//       }
-//       window.location.href = "/";
+//       callback(response["goods"]);
 //     },
 //   });
 // }
 
-function getGoods(category, callback) {
-  $("#goodsList").empty();
+/* 1_1. post new article | level, writer, title, url */
+function addArticle() {
+  let level = $("#level").val();
+  let writer = $("#writer").val();
+  let title = $("#title").val();
+  let url = $("#url").val();
   $.ajax({
-    type: "GET",
-    url: `/api/goods${category ? "?category=" + category : ""}`,
-    // headers: {
-    //   authorization: `Bearer ${localStorage.getItem("token")}`,
-    // },
+    type: "POST",
+    url: "/api/articles",
+    data: {
+      level_give: level,
+      writer_give: writer,
+      title_give: title,
+      url_give: url,
+    },
     success: function (response) {
-      callback(response["goods"]);
+      alert("saved");
+      window.location.reload();
     },
   });
 }
 
-function signOut() {
-  localStorage.clear();
-  window.location.href = "/";
-}
+/* 2. put | level, title, url */
+function modifyArticle() {
+  $("#btn-modify").show();
+  $("#btn-delete").show();
+  $("#btn-save").hide();
 
-function getGoodsDetail(goodsId, callback) {
-  $.ajax({
-    type: "GET",
-    url: `/api/goods/${goodsId}`,
-    // headers: {
-    //   authorization: `Bearer ${localStorage.getItem("token")}`,
-    // },
-    error: function (xhr, status, error) {
-      if (status == 401) {
-        alert("로그인이 필요합니다.");
-      } else if (status == 404) {
-        alert("존재하지 않는 상품입니다.");
-      } else {
-        alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
-      }
-      window.location.href = "/goods";
-    },
-    success: function (response) {
-      callback(response.goods);
-    },
-  });
-}
-
-function makeBuyNotification(targetNickname, goodsName, goodsId, date) {
-  const messageHtml = `${targetNickname}님이 방금 <a href="/detail.html?goodsId=${goodsId}" class="alert-link">${goodsName}</a>을 구매했어요! <br /><small>(${date})</small>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>`;
-  const alt = $("#customerAlert");
-  if (alt.length) {
-    alt.html(messageHtml);
-  } else {
-    const htmlTemp = `<div class="alert alert-sparta alert-dismissible show fade" role="alert" id="customerAlert">${messageHtml}</div>`;
-    $("body").append(htmlTemp);
-  }
-}
-
-function addToCart(goodsId, quantity, callback) {
+  let bno = getCheckboxValue();
+  let level = $("#level").val();
+  let title = $("#title").val();
+  let url = $("#url").val();
+  let comp_yn = $("#comp_yn").val();
+  
+  alert(bno)
+  alert(level)
+  alert(title)
+  alert(url)
+  alert(comp_yn);
   $.ajax({
     type: "PUT",
-    url: `/api/goods/${goodsId}/cart`,
-    // headers: {
-    //   authorization: `Bearer ${localStorage.getItem("token")}`,
-    // },
+    url: `/api/articles/${bno}`,
     data: {
-      quantity,
+      level_give: level,
+      title_give: title,
+      url_give: url,
+      comp_yn_give: comp_yn,
     },
     error: function (xhr, status, error) {
       if (status == 400) {
-        alert("존재하지 않는 상품입니다.");
+        alert("Cannot modify null data");
+      } else {
+        console.log(bno, error);
       }
-      window.location.href = "/goods.html";
     },
     success: function () {
-      callback();
+      alert("save changes");
+      window.location.reload();
     },
   });
 }
 
-function buyLocation(params) {
-  sessionStorage.setItem("ordered", JSON.stringify(params));
-  location.href = "order.html";
-}
-
-function getCarts(callback) {
-  $.ajax({
-    type: "GET",
-    url: `/api/goods/cart`,
-    // headers: {
-    //   authorization: `Bearer ${localStorage.getItem("token")}`,
-    // },
-    success: function (response) {
-      callback(response.cart);
-    },
-  });
-}
-
-function deleteCart(goodsId, callback) {
+function deleteArticle() {
+  let bno = getCheckboxValue();
   $.ajax({
     type: "DELETE",
-    url: `/api/goods/${goodsId}/cart`,
-    // headers: {
-    //   authorization: `Bearer ${localStorage.getItem("token")}`,
-    // },
+    url: `/api/articles/${bno}`,
     success: function () {
-      callback();
+      alert("deleted");
+      window.location.reload();
     },
   });
 }
