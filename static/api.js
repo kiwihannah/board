@@ -97,12 +97,6 @@ function modifyArticle() {
   let title = $("#title").val();
   let url = $("#url").val();
   let comp_yn = $("#comp_yn").val();
-  
-  alert(bno)
-  alert(level)
-  alert(title)
-  alert(url)
-  alert(comp_yn);
   $.ajax({
     type: "PUT",
     url: `/api/articles/${bno}`,
