@@ -1,3 +1,14 @@
+* {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: 'Inconsolata', monospace;
+  font-family: 'Jua', sans-serif;
+}
+
+.big-checkbox {
+  width: 18px; 
+  height: 18px;
+}
+
 #buttons {
   padding-bottom: 25px ;
   float: left;

@@ -3,11 +3,6 @@ function btnHide() {
   $("#btn-delete").hide();
 }
 
-function btnShow() {
-  $("#btn-modify").show();
-  $("#btn-delete").show();
-}
-
 function getCheckboxValue() {
   let bnos = document.getElementsByName("checkBno");
   let arrBno = [];
@@ -37,8 +32,8 @@ function getArticles() {
 
 /* 0_2. read one article */
 function getOneArticle() {
-  let bno = getCheckboxValue();
   $("#new-form").empty();
+  let bno = getCheckboxValue();
   $.ajax({
     type: "GET",
     url: `/api/articles/${bno}`,
@@ -88,7 +83,7 @@ function addArticle() {
       url_give: url,
     },
     success: function (response) {
-      alert("saved");
+      alert("저장되었습니다.");
       window.location.reload();
     },
   });
@@ -96,10 +91,6 @@ function addArticle() {
 
 /* 2. put | level, title, url */
 function modifyArticle() {
-  $("#btn-modify").show();
-  $("#btn-delete").show();
-  $("#btn-save").hide();
-
   let bno = getCheckboxValue();
   let level = $("#level").val();
   let title = $("#title").val();
@@ -116,13 +107,13 @@ function modifyArticle() {
     },
     error: function (xhr, status, error) {
       if (status == 400) {
-        alert("Cannot modify null data");
+        alert("수정할 대상이 존재하지 않습니다.");
       } else {
         console.log(bno, error);
       }
     },
     success: function () {
-      alert("save changes");
+      alert("수정한 내용이 저장되었습니다.");
       window.location.reload();
     },
   });
@@ -134,7 +125,7 @@ function deleteArticle() {
     type: "DELETE",
     url: `/api/articles/${bno}`,
     success: function () {
-      alert("deleted");
+      alert("삭제되었습니다.");
       window.location.reload();
     },
   });

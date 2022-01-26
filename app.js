@@ -18,7 +18,7 @@ const myLogger = function (req, res, next) {
 app.use(myLogger);
 app.use(express.static("static"));
 app.use(express.json());
-app.use(bodyParser.json());//json타입
+app.use(bodyParser.json());
 app.use(express.urlencoded({extended : false}));
 
 /* sever connecting log */

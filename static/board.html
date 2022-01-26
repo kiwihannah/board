@@ -20,6 +20,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <link href="/mystyle.css" rel="stylesheet" />
 <!-- <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script> -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@1,100&family=Inconsolata:wght@200&family=Jua&display=swap" rel="stylesheet">
 <!------ Include the above in your HEAD tag ---------->
 
 <script src="/api.js"></script>
@@ -30,20 +34,29 @@
     });
 
     function addList(article) {
+        let trance_comp = article["comp_yn"] === "Y" ? "✔ 다 풀었다!" : "❌ 못 풀었다!";
+        let difficulty = "";
+        if (article["level"] === 1) {
+            difficulty = "<strong style='color: skyblue;'>초급<strong>";
+        } else if (article["level"] === 2) {
+            difficulty = "<strong style='color: yellowgreen;'>중급<strong>";
+        } else {
+            difficulty = "<strong style='color: hotpink;'>고급<strong>";
+        }
         let temp_html = `<tr>
                             <td>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" 
+                                    <input class="form-check-input big-checkbox" type="checkbox" 
                                         value="${article["bno"]}" name="checkBno" id="bno">
                                     <label class="form-check-label" for="bno">
                                         ${article["bno"]}
                                     </label>
                                 </div>
                             </td>
-                            <th>${article["level"]}</th>
+                            <th>${difficulty}</th>
                             <td><a href="${article["url"]}">${article["title"]}</a></td>
                             <td>${article["ins_date"]}</td>
-                            <td>${article["comp_yn"]}</td>
+                            <td>${trance_comp}</td>
                         </tr>`;
         $("#article-list").append(temp_html);
     }
@@ -52,36 +65,37 @@
         $("#btn-save").hide();
         let bool = getCheckboxValue();
         if (bool === -1) {
-            alert("check one article to mogdify");
+            alert("한 개의 게시글을 선택해 주세요");
             window.location.reload();
         } else {
+            $("#new-form").empty();
             getOneArticle();
         }
     }
 
     function readOne(article) {
-        let temp_html = `<label for="level">difficulty level</label>
+        let temp_html = `<label for="level">문제 난이도</label>
                         <select class="form-control" id="level">
                             <option value="1">초급</option>
                             <option value="2">중급</option>
                             <option value="3" >고급</option>
                         </select>
                         <div class="form-group">
-                            <label for="writer">writer</label>
+                            <label for="writer">작성자</label>
                             <input type="text" class="form-control" id="writer" value="${article["writer"]}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="title">title</label>
+                            <label for="title">제목</label>
                             <input type="text" class="form-control" id="title" placeholder="${article["title"]}">
                         </div>
                         <div class="form-group">
-                            <label for="url">url</label>
+                            <label for="url">문제 url</label>
                             <input type="text" class="form-control" id="url" placeholder="${article["url"]}">
                         </div>
-                        <label for="level">solved</label>
+                        <label for="level">완료여부</label>
                         <select class="form-control" id="comp_yn">
-                            <option value="N">NO</option>
-                            <option value="Y">YES</option>
+                            <option value="N">아직!</option>
+                            <option value="Y">풀었다!</option>
                         </select>`;
         $("#new-form").append(temp_html);
 
@@ -138,20 +152,20 @@
         <div class="parent">
             <div class="first" id="buttons">
                 <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                    data-target="#modalAbandonedCart" onclick="btnHide()">
-                    add new</button>
+                    data-target="#modalAbandonedCart" onclick="btnHide()">글 쓰기</button>
                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                    data-target="#modalAbandonedCart" onclick="readOneArticle()">modify</button>
+                    data-target="#modalAbandonedCart" onclick="readOneArticle()">수정하기</button>
                 <!-- <button type="button" class="btn btn-outline-warning">to today's list</button> -->
             </div>
             <div class="second">
                 <select class="form-control" id="orderBySolve">
-                    <option value="Y">solved</option>
-                    <option value="N">unsolved</option>
+                    <option value="N">못 푼 문제</option>
+                    <option value="Y">다 푼 문제</option>
                 </select>
             </div>
             <div class="third">
                 <select class="form-control" id="orderByLevel">
+                    <option value="0">전체</option>
                     <option value="1">초급</option>
                     <option value="2">중급</option>
                     <option value="3">고급</option>
@@ -159,22 +173,22 @@
             </div>
             <div class="forth">
                 <select class="form-control" id="orederByDate">
-                    <option value="-1">최신순</option>
                     <option value="1">오래된순</option>
+                    <option value="-1">최신순</option>
                 </select>
             </div>
             <div class="d-grid gap-2 btn-block fifth">
-                <a type="submit" class="btn btn-info btn-block" id="btn-save" onclick="searchArticles()">search</a>
+                <a type="submit" class="btn btn-success btn-block" onclick="searchArticles()"> 검색 👀 </a>
             </div>
         </div>
         <table class="table table-bordered table-definition mb-5">
             <thead class="table-warning ">
                 <tr>
-                    <th>#</th>
-                    <th>level</th>
-                    <th>title</th>
-                    <th>date</th>
-                    <th>solved</th>
+                    <th style="width: 8%;">글번호</th>
+                    <th style="width: 10%;">난이도</th>
+                    <th style="width: 50%;">제목</th>
+                    <th style="width: 17%;">등록일</th>
+                    <th style="width: 15%;">완료여부</th>
                 </tr>
             </thead>
             <tbody id="article-list">
@@ -184,7 +198,7 @@
                     <th colspan="5">
                         <ul class="pagination justify-content-end mt-3 mr-3">
                             <li class="page-item disabled">
-                                <span class="page-link">Previous</span>
+                                <span class="page-link">👈</span>
                             </li>
                             <li class="page-item"><a class="page-link" href="#">1</a></li>
                             <li class="page-item active">
@@ -193,7 +207,7 @@
                             </li>
                             <li class="page-item"><a class="page-link" href="#">3</a></li>
                             <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
+                                <a class="page-link" href="#">👉</a>
                             </li>
                         </ul>
                     </th>
@@ -220,7 +234,7 @@
                 <!--Header-->
                 <div class="modal-header">
                     <p class="heading">
-                    <h3>form</h3>
+                    <h4>📝 모두 작성해 주세요</h4>
                     </p>
 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
@@ -233,33 +247,33 @@
                 <div class="modal-body">
                     <!-- bno, level, writer, title, context -->
                     <div class="form-group" id="new-form">
-                        <label for="level">difficulty level</label>
+                        <label for="level">난이도</label>
                         <select class="form-control" id="level">
                             <option value="1">초급</option>
                             <option value="2">중급</option>
                             <option value="3">고급</option>
                         </select>
                         <div class="form-group">
-                            <label for="writer">writer</label>
+                            <label for="writer">작성자</label>
                             <input type="text" class="form-control" id="writer" value="Hannah" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="title">title</label>
+                            <label for="title">제목</label>
                             <input type="text" class="form-control" id="title">
                         </div>
                         <div class="form-group">
-                            <label for="url">url</label>
+                            <label for="url">문제 url</label>
                             <input type="text" class="form-control" id="url">
                         </div>
                     </div>
 
                     <!--Footer-->
                     <div class="modal-footer justify-content-center">
-                        <a type="submit" class="btn btn-info" id="btn-save" onclick="addArticle()">save</a>
-                        <a type="submit" class="btn btn-info" id="btn-modify" onclick="modifyArticle()">modify</a>
-                        <a type="submit" class="btn btn-info" id="btn-delete" onclick="deleteArticle()">delete</a>
-                        <a type="button" class="btn btn-outline-info waves-effect" data-dismiss="modal"
-                            onclick="javascript:window.location.reload();">Cancel</a>
+                        <a type="submit" class="btn btn-outline-info" id="btn-save" onclick="addArticle()">저장하기</a>
+                        <a type="submit" class="btn btn-outline-success" id="btn-modify" onclick="modifyArticle()">수정완료</a>
+                        <a type="submit" class="btn btn-outline-danger" id="btn-delete" onclick="deleteArticle()">삭제하기</a>
+                        <a type="button" class="btn btn-outline-secondary waves-effect" data-dismiss="modal"
+                            onclick="javascript:window.location.reload();">돌아가기</a>
                     </div>
                 </div>
                 <!--/.Content-->
