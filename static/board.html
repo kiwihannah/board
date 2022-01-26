@@ -34,7 +34,7 @@
     });
 
     function addList(article) {
-        let trance_comp = article["comp_yn"] === "Y" ? "✔ 다 풀었다!" : "❌ 못 풀었다!";
+        let trance_comp = article["comp_yn"] === "Y" ? "✔ 풀었다!" : "❌ 못 풀었다!";
         let difficulty = "";
         if (article["level"] === 1) {
             difficulty = "<strong style='color: skyblue;'>초급<strong>";
@@ -54,7 +54,7 @@
                                 </div>
                             </td>
                             <th>${difficulty}</th>
-                            <td><a href="${article["url"]}">${article["title"]}</a></td>
+                            <td title="${article["url"]}"><a href="${article["url"]}">${article["title"]}</a></td>
                             <td>${article["ins_date"]}</td>
                             <td>${trance_comp}</td>
                         </tr>`;
@@ -86,15 +86,15 @@
                         </div>
                         <div class="form-group">
                             <label for="title">제목</label>
-                            <input type="text" class="form-control" id="title" placeholder="${article["title"]}">
+                            <input type="text" class="form-control" id="title" value="${article["title"]}">
                         </div>
                         <div class="form-group">
                             <label for="url">문제 url</label>
-                            <input type="text" class="form-control" id="url" placeholder="${article["url"]}">
+                            <input type="text" class="form-control" id="url" value="${article["url"]}">
                         </div>
-                        <label for="level">완료여부</label>
+                        <label for="comp-yn">완료여부</label>
                         <select class="form-control" id="comp_yn">
-                            <option value="N">아직!</option>
+                            <option value="N">아직 못 풀었다!</option>
                             <option value="Y">풀었다!</option>
                         </select>`;
         $("#new-form").append(temp_html);
@@ -106,6 +106,8 @@
         } else {
             $("select option[value='3']").attr("selected", "selected");
         }
+        article["comp_yn"] === "N" ? $("select option[value='N']").attr("selected", "selected") 
+                                    : $("select option[value='Y']").attr("selected", "selected"); 
     }
 
 </script>
@@ -161,7 +163,7 @@
             <div class="second">
                 <select class="form-control" id="orderBySolve">
                     <option value="N">못 푼 문제</option>
-                    <option value="Y">다 푼 문제</option>
+                    <option value="Y">푼 문제</option>
                 </select>
             </div>
             <div class="third">
@@ -174,8 +176,8 @@
             </div>
             <div class="forth">
                 <select class="form-control" id="orederByDate">
-                    <option value="1">오래된순</option>
-                    <option value="-1">최신순</option>
+                    <option value="1">오래된 순</option>
+                    <option value="-1">최신 순</option>
                 </select>
             </div>
             <div class="d-grid gap-2 btn-block fifth">
@@ -198,7 +200,7 @@
                 <tr>
                     <th colspan="5">
                         <ul class="pagination justify-content-end mt-3 mr-3">
-                            <li class="page-item disabled">
+                            <li class="page-item">
                                 <span class="page-link">👈</span>
                             </li>
                             <li class="page-item"><a class="page-link" href="#">1</a></li>

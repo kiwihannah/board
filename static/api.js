@@ -129,21 +129,19 @@ function modifyArticle() {
 
 /* 2_2. put | comp_yn*/
 function makeItComp() {
-  let arrBno = getAllCheckboxValue(); 
-  //alert(arrBno);
-  if (arrBno.length){
-    let cnt = "";
-    for (let i=0; i<arrBno.length; i++) {
+  let arrBno = getAllCheckboxValue();
+  if (arrBno.length) {
+    for (let i = 0; i < arrBno.length; i++) {
       let bno = arrBno[i];
       $.ajax({
         type: "PUT",
         url: `/api/make-it-comp/${bno}`,
       });
     }
-    alert(cnt+"완료처리 되었습니다.");
+    alert("완료처리 되었습니다.");
     window.location.reload();
   } else {
-    alert('완료처리 할 게시글이 없습니다.');
+    alert("완료처리 할 게시글이 없습니다.");
   }
 }
 

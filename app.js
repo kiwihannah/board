@@ -27,7 +27,7 @@ app.listen(port, () => { console.log(new Date().toLocaleTimeString(), "|", port,
 /* middleware use*/
 const articleRouter = require("./routes/article");
 const todoRouter = require("./routes/todo");
+const article = require('./schemas/article');
+const e = require('express');
 app.use("/api", [articleRouter, todoRouter]);
 
-/* default */
-app.get("/", (req, res) => { res.send("home page"); });
