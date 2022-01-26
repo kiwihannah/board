@@ -14,6 +14,17 @@ function getCheckboxValue() {
   return arrBno.length === 1 ? arrBno[0] : -1;
 }
 
+function getAllCheckboxValue() {
+  let bnos = document.getElementsByName("checkBno");
+  let arrBno = [];
+  for (var i = 0; i < bnos.length; i++) {
+    if (bnos[i].checked == true) {
+      arrBno.push(bnos[i].value);
+    }
+  }
+  return arrBno;
+}
+
 /* 0_1. read all article */
 function getArticles() {
   $("#article-list").empty();
@@ -51,17 +62,14 @@ function searchArticles() {
   let orderByLevel = $("#orderByLevel").val();
   let orderBySolve = $("#orderBySolve").val();
   let orederByDate = $("#orederByDate").val();
-  //alert(orderByLevel);alert(orderBySolve);alert(orederByDate);
-  //let params = "level=" + orderByLevel + "&comp_yn=" + orderBySolve + "&ins_date=" + orederByDate;
   $.ajax({
     type: "GET",
     url: `/api/filter?level=${orderByLevel}&comp_yn=${orderBySolve}&ins_date=${orederByDate}`,
-    //url: "/api/filter?level=1&comp_yn=Y&ins_date=-1",
     success: function (response) {
-      console.log("[api : read selectvly ]");
-      let articles = response["articles"];
-      for (let i = 0; i < articles.length; i++) {
-        addList(articles[i]);
+      let filtered = response["filtered"];
+      for (let i = 0; i < filtered.length; i++) {
+        console.log("[api : read filtered article]");
+        addList(filtered[i]);
       }
     },
   });
@@ -117,6 +125,26 @@ function modifyArticle() {
       window.location.reload();
     },
   });
+}
+
+/* 2_2. put | comp_yn*/
+function makeItComp() {
+  let arrBno = getAllCheckboxValue(); 
+  //alert(arrBno);
+  if (arrBno.length){
+    let cnt = "";
+    for (let i=0; i<arrBno.length; i++) {
+      let bno = arrBno[i];
+      $.ajax({
+        type: "PUT",
+        url: `/api/make-it-comp/${bno}`,
+      });
+    }
+    alert(cnt+"완료처리 되었습니다.");
+    window.location.reload();
+  } else {
+    alert('완료처리 할 게시글이 없습니다.');
+  }
 }
 
 function deleteArticle() {

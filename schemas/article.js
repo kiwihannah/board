@@ -12,7 +12,7 @@ const articleSchema = new mongoose.Schema({
         required: true,
         unique: false
     },
-    writer: { //mem_code
+    writer: {
         type: String,
         required: true,
         unique: false
@@ -41,7 +41,7 @@ const articleSchema = new mongoose.Schema({
         type: String,
         unique: false
     },
-    use_yn: {
+    goal_yn: {
         type: String,
         required: true,
         unique: false

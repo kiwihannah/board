@@ -20,7 +20,7 @@ router.post("/articles", async (req, res) => {
         comp_yn : "N",
         ins_date: new Date().toISOString().split('T')[0], 
         upd_date: new Date().toISOString().split('T')[0], 
-        use_yn  : "Y" 
+        goal_yn  : "N" 
     });
     console.log("[Router : POST]", article[0]["bno"] +1);
     res.json({ article: createdArticle });
@@ -48,12 +48,12 @@ router.get("/articles/:bno", async (req, res) => {
 //"/filter/:level/:comp_yn/:ins_date"
 router.get("/filter", async (req, res) => {
     const { level, comp_yn, ins_date } = req.query
-    console.log( level, comp_yn, ins_date );
-    let temp_lvl = Number(level) === 0 ? "" : "'level' : "+ level;
-    // const articles = await Article.find({ "level" : level }).sort({ "bno" : -1 })
-    const articles = await Article.find({ $and : [{ temp_lvl }, { "comp_yn" : comp_yn }] }).sort({ "ins_date" : ins_date });
-    console.log("[Router : READ FILTERED]", articles);
-    res.json({ articles });
+    let query = ""; 
+    Number(level) === 0 ? query = { } : query = { level: level };
+    console.log(query, comp_yn, ins_date);
+    const filtered = await Article.find({ $and : [query, { "comp_yn" : comp_yn }] }).sort({ "ins_date" : ins_date });
+    console.log("[Router : READ FILTERED]");
+    res.json({ filtered });
 });
 
 // 3. update filtered by bno - method: put
@@ -72,6 +72,20 @@ router.put("/articles/:bno", async (req, res) => {
             } 
     });
     console.log("[Router : MODIFY ONE]", article["bno"]);
+    res.json({ result: "success" });
+});
+
+// 2_2. put make it comp
+router.put("/make-it-comp/:bno", async (req, res) => {
+    const { bno } = req.params;
+    const article = await Article.findOne({ bno });
+    await Article.updateOne({ bno: bno }, 
+    { $set: {
+                comp_yn : 'Y',
+                upd_date: new Date().toISOString().split('T')[0] 
+            } 
+    });
+    console.log("[Router : COMP ONE]", article["bno"]);
     res.json({ result: "success" });
 });
 

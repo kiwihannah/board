@@ -24,29 +24,33 @@
 
 .first {
   float: left;
-  width: 40%;
+  width: 39%;
 }
 
 .second{
   float: left;
   margin-left: 1%;
-  width:15%;
+  width:13%;
 }
 
 .third{
   float: left;
   margin-left: 1%;
-  width:15%;
+  width:13%;
 }
 
 .forth{
   float: left;
   margin-left: 1%;
-  width:15%;
+  width:13%;
 }
 
 .fifth{
   float: right;
   margin-left: 1%;
-  width:11%;
+  width:9%;
+}
+
+.btn-comp {
+  margin-left: 8%;
 }
