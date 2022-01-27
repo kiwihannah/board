@@ -57,21 +57,22 @@ router.get("/article/:bno", async (req, res) => {
 
 // 1_3. read Many filtered by level, order, comp_yn
 router.get("/filter", async (req, res) => {
-  const { level, comp_yn, ins_date } = req.query;
-  let page = Math.max(1, parseInt(req.query.page)); // string -> int
-  let query = "";
-  let limit = 7;
-  Number(level) === 0 ? (query = {}) : (query = { level: level });
-  console.log(query, comp_yn, ins_date);
-  page = !isNaN(page) ? page : 1;
-  let skip = (page - 1) * limit;
-  let count = await Article.countDocuments({});
-  let maxPage = Math.ceil(count / limit);
-  const filtered = await Article.find({ $and: [query, { comp_yn: comp_yn }] })
-    .sort({ ins_date: ins_date })
-    .skip(skip)
-    .limit(limit)
-    .exec();
+    const { level, comp_yn, ins_date } = req.query;
+    let page = Math.max(1, parseInt(req.query.page)); // string -> int
+    let query = "";
+    let limit = 6;
+    Number(level) === 0 ? (query = {}) : (query = { level: level });
+    console.log(query, comp_yn, ins_date);
+    page = !isNaN(page) ? page : 1;
+    let skip = (page - 1) * limit;
+    const filtered = await Article.find({ $and: [query, { comp_yn: comp_yn }] })
+        .sort({ ins_date: ins_date })
+        .skip(skip)
+        .limit(limit)
+        .exec();
+    const max = await Article.find({ $and: [query, { comp_yn: comp_yn }] });
+    let count = max.length;
+    let maxPage = Math.ceil(count / limit);
   res.json({ filtered: filtered, currentPage: page, maxPage: maxPage });
 });
 

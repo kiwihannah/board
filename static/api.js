@@ -34,6 +34,9 @@ function getArticles() {
     success: function (response) {
       console.log("[api : read all]");
       let articles = response["articles"];
+      let currentPage = response["currentPage"];
+      let maxPage = response["maxPage"];
+      pagination(currentPage, maxPage);
       for (let i = 0; i < articles.length; i++) {
         addList(articles[i]);
       }
@@ -57,20 +60,24 @@ function getOneArticle() {
 }
 
 /* 0_3. read many article | level, order, comp_yn */
-function searchArticles() {
+function searchArticles(page) {
+  if (page === 0) page = 1;
   $("#article-list").empty();
   let orderByLevel = $("#orderByLevel").val();
   let orderBySolve = $("#orderBySolve").val();
   let orederByDate = $("#orederByDate").val();
   $.ajax({
     type: "GET",
-    url: `/api/filter?level=${orderByLevel}&comp_yn=${orderBySolve}&ins_date=${orederByDate}`,
+    url: `/api/filter?level=${orderByLevel}&comp_yn=${orderBySolve}&ins_date=${orederByDate}&page=${page}`,
     success: function (response) {
       let filtered = response["filtered"];
+      let currentPage = response["currentPage"];
+      let maxPage = response["maxPage"];
       for (let i = 0; i < filtered.length; i++) {
         console.log("[api : read filtered article]");
         addList(filtered[i]);
       }
+      pagination(currentPage, maxPage);
     },
   });
 }
@@ -155,4 +162,24 @@ function deleteArticle() {
       window.location.reload();
     },
   });
+}
+
+function pagination(currentPage, maxPage) {
+  $("#pagingNav").empty();
+  let prevPage = currentPage - 1;
+  let nextPage = currentPage + 1;
+  let prevClass = "", nextClass = "";
+  if (currentPage === 1) prevClass = "disabled";
+  if (currentPage === maxPage) nextClass = "disabled";
+  let temp_html = `<li class="page-item ${prevClass}">
+                    <a class="page-link" onclick="searchArticles('${prevPage}')">👈 이전 </a>
+                  </li>
+                  <li class="page-item">
+                    <span class="page-link"> [ ${currentPage} ] <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                  <li class="page-item ${nextClass}">
+                    <a class="page-link" onclick="searchArticles('${nextPage}')"> 다음 👉</a>
+                  </li>`;
+  $("#pagingNav").append(temp_html);
 }
