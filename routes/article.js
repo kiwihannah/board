@@ -60,7 +60,7 @@ router.get("/filter", async (req, res) => {
     const { level, comp_yn, ins_date } = req.query;
     let page = Math.max(1, parseInt(req.query.page)); // string -> int
     let query = "";
-    let limit = 6;
+    let limit = 8;
     Number(level) === 0 ? (query = {}) : (query = { level: level });
     console.log(query, comp_yn, ins_date);
     page = !isNaN(page) ? page : 1;

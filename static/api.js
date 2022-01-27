@@ -88,6 +88,15 @@ function addArticle() {
   let writer = $("#writer").val();
   let title = $("#title").val();
   let url = $("#url").val();
+  if(url==="" || title==="") {
+    alert("필요한 정보를 모두 입력해주세요");
+    return false;
+  }
+  const val = /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi;
+  if(!val.test(url)) {
+    alert("유효한 URL 주소가 아닙니다.");
+    return false;
+  }
   $.ajax({
     type: "POST",
     url: "/api/articles",
@@ -111,6 +120,15 @@ function modifyArticle() {
   let title = $("#title").val();
   let url = $("#url").val();
   let comp_yn = $("#comp_yn").val();
+  if(url==="" || title==="") {
+    alert("필요한 정보를 모두 입력해주세요");
+    return false;
+  }
+  const val = /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi;
+  if(!val.test(url)) {
+    alert("유효한 URL 주소가 아닙니다.");
+    return false;
+  }
   $.ajax({
     type: "PUT",
     url: `/api/articles/${bno}`,
