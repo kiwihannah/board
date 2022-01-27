@@ -47,7 +47,7 @@ function getOneArticle() {
   let bno = getCheckboxValue();
   $.ajax({
     type: "GET",
-    url: `/api/articles/${bno}`,
+    url: `/api/article/${bno}`,
     success: function (response) {
       let article = response["article"];
       console.log("[api : read one]", article["bno"]);

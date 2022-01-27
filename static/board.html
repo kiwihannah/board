@@ -23,7 +23,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@1,100&family=Inconsolata:wght@200&family=Jua&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@1,100&family=Inconsolata:wght@200&family=Jua&display=swap"
+    rel="stylesheet">
 <!------ Include the above in your HEAD tag ---------->
 
 <script src="/api.js"></script>
@@ -106,8 +108,8 @@
         } else {
             $("select option[value='3']").attr("selected", "selected");
         }
-        article["comp_yn"] === "N" ? $("select option[value='N']").attr("selected", "selected") 
-                                    : $("select option[value='Y']").attr("selected", "selected"); 
+        article["comp_yn"] === "N" ? $("select option[value='N']").attr("selected", "selected")
+            : $("select option[value='Y']").attr("selected", "selected");
     }
 
 </script>
@@ -199,17 +201,21 @@
             <tfoot>
                 <tr>
                     <th colspan="5">
-                        <ul class="pagination justify-content-end mt-3 mr-3">
-                            <li class="page-item">
+                        <ul class="pagination justify-content-end mt-3 mr-3" id="paging">
+                            <li class="page-item active">
                                 <span class="page-link">👈</span>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item">
+                                <a class="page-link" onclick="goPrev()">1</a>
+                            </li>
                             <li class="page-item active">
-                                <span class="page-link">2<span class="sr-only">(current)</span>
+                                <span class="page-link"><span class="sr-only">(current)</span>
                                 </span>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
                             <li class="page-item">
+                                <a class="page-link" onclick="goNext()">3</a>
+                            </li>
+                            <li class="page-item active">
                                 <a class="page-link" href="#">👉</a>
                             </li>
                         </ul>
@@ -273,8 +279,10 @@
                     <!--Footer-->
                     <div class="modal-footer justify-content-center">
                         <a type="submit" class="btn btn-outline-info" id="btn-save" onclick="addArticle()">저장하기</a>
-                        <a type="submit" class="btn btn-outline-success" id="btn-modify" onclick="modifyArticle()">수정완료</a>
-                        <a type="submit" class="btn btn-outline-danger" id="btn-delete" onclick="deleteArticle()">삭제하기</a>
+                        <a type="submit" class="btn btn-outline-success" id="btn-modify"
+                            onclick="modifyArticle()">수정완료</a>
+                        <a type="submit" class="btn btn-outline-danger" id="btn-delete"
+                            onclick="deleteArticle()">삭제하기</a>
                         <a type="button" class="btn btn-outline-secondary waves-effect" data-dismiss="modal"
                             onclick="javascript:window.location.reload();">돌아가기</a>
                     </div>
